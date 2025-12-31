@@ -140,6 +140,7 @@ Chương trình sẽ gán nhãn cụm cho từng khách hàng và trực quan h�
 6.4. Cấu trúc thư mục dự án
 
 BTL_MachineLearning/
+
 │
 app/
  └── BTL_ML.ipynb
