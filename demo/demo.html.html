@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Customer Segmentation - KMeans</title>
+
+<style>
+body {
+    background: linear-gradient(120deg, #74ebd5, #acb6e5);
+    font-family: "Segoe UI", sans-serif;
+}
+
+.container {
+    width: 450px;
+    margin: 60px auto;
+    background: white;
+    border-radius: 16px;
+    padding: 25px 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: 600;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: #4a6cf7;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #3855d6;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 12px;
+    color: white;
+    display: none;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Customer Segmentation Demo</h2>
+
+    <label>Thu nhập hàng năm (k$)</label>
+    <input type="number" id="income" placeholder="Ví dụ: 60" min="1">
+
+    <label>Điểm chi tiêu (1 – 100)</label>
+    <input type="number" id="score" placeholder="Ví dụ: 75" min="1" max="100">
+
+    <button onclick="predictCluster()">Xác định nhóm khách hàng</button>
+
+    <div id="error" class="error"></div>
+    <div id="result" class="result"></div>
+</div>
+
+<script>
+// ===== CENTROIDS TỪ PYTHON KMEANS =====
+const centroids = [
+  { income: 55.30, score: 49.52, name: "Trung bình", color: "#1976d2", strategy: "Duy trì, chăm sóc định kỳ" },
+  { income: 86.54, score: 82.13, name: "Thu nhập cao – Chi tiêu cao (VIP)", color: "#388e3c", strategy: "Chăm sóc đặc biệt" },
+  { income: 25.73, score: 79.36, name: "Thu nhập thấp – Chi tiêu cao", color: "#fbc02d", strategy: "Khuyến mãi, giảm giá" },
+  { income: 88.20, score: 17.11, name: "Thu nhập cao – Chi tiêu thấp", color: "#d32f2f", strategy: "Kích thích chi tiêu" },
+  { income: 26.30, score: 20.91, name: "Thu nhập thấp – Chi tiêu thấp", color: "#7b1fa2", strategy: "Không ưu tiên" }
+];
+
+// ===== EUCLID DISTANCE =====
+function euclid(x1, y1, x2, y2) {
+    return Math.sqrt((x1 - x2)**2 + (y1 - y2)**2);
+}
+
+// ===== PREDICT CLUSTER =====
+function predictCluster() {
+    const income = parseFloat(document.getElementById("income").value);
+    const score = parseFloat(document.getElementById("score").value);
+    const error = document.getElementById("error");
+    const result = document.getElementById("result");
+
+    error.innerHTML = "";
+    result.style.display = "none";
+
+    // ===== VALIDATION =====
+    if (isNaN(income) || isNaN(score)) {
+        error.innerHTML = "⚠️ Vui lòng nhập đầy đủ dữ liệu.";
+        return;
+    }
+
+    if (income <= 0) {
+        error.innerHTML = "⚠️ Thu nhập phải lớn hơn 0.";
+        return;
+    }
+
+    if (score < 1 || score > 100) {
+        error.innerHTML = "⚠️ Điểm chi tiêu phải nằm trong khoảng 1–100.";
+        return;
+    }
+
+    // ===== FIND NEAREST CLUSTER =====
+    let minDist = Infinity;
+    let chosen = null;
+
+    centroids.forEach(c => {
+        const d = euclid(income, score, c.income, c.score);
+        if (d < minDist) {
+            minDist = d;
+            chosen = c;
+        }
+    });
+
+    // ===== SHOW RESULT =====
+    result.style.display = "block";
+    result.style.background = chosen.color;
+    result.innerHTML = `
+        <b>Nhóm khách hàng:</b> ${chosen.name}<br>
+        <b>Chiến lược:</b> ${chosen.strategy}<br>
+    `;
+}
+</script>
+
+</body>
+</html>
