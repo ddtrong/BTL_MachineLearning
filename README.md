@@ -102,11 +102,11 @@ Thường được sử dụng trong các bài toán marketing thực tế
 
 5.1. Kết quả đánh giá theo số cụm K
 
-Số cụm (K) | Silhouette Score | Davies–Bouldin Index
-4 | 0.4943 | 0.6975
-5 | 0.5547 | 0.5722
-6 | 0.5138 | 0.6239
-7 | 0.5020 | 0.6925
+Số cụm (K)	Silhouette Score	Davies–Bouldin Index
+4	0.4943	0.6975
+5	0.5547	0.5722
+6	0.5138	0.6239
+7	0.5020	0.6925
 
 5.2. Phân tích kết quả
 
@@ -140,14 +140,19 @@ Chương trình sẽ gán nhãn cụm cho từng khách hàng và trực quan h�
 6.4. Cấu trúc thư mục dự án
 
 BTL_MachineLearning/
+│
 app/
-└── BTL_ML.ipynb
+ └── BTL_ML.ipynb
+
 data/
-└── Mall_Customers.csv
+ └── Mall_Customers.csv
+
 demo/
-└── demo.html
+ └── demo.html
+
 slides/
-└── PHÂN CỤM KHÁCH HÀNG SIÊU...
+ └── PHÂN CỤM KHÁCH HÀNG SIÊU...
+
 .gitignore
 README.md
 requirements.txt
